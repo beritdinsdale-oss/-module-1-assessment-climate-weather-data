@@ -28,31 +28,46 @@ function signed(value, digits = 1, suffix = "") {
 }
 
 function buildComparisonTable(summary) {
-  const body = document.querySelector("#comparison-body");
-  body.innerHTML = "";
+  const temperatureBody = document.querySelector("#temperature-comparison-body");
+  const precipitationBody = document.querySelector("#precipitation-comparison-body");
+
+  temperatureBody.innerHTML = "";
+  precipitationBody.innerHTML = "";
 
   summary.forEach(row => {
-    const tr = document.createElement("tr");
-    const values = [
+    const temperatureRow = document.createElement("tr");
+    const temperatureValues = [
       row.month,
       row.observedMax === null ? "Missing" : `${row.observedMax.toFixed(1)}°F`,
       `${row.normalMax.toFixed(1)}°F`,
-      signed(row.observedMax === null ? null : row.observedMax - row.normalMax, 1, "°F"),
+      signed(row.observedMax === null ? null : row.observedMax - row.normalMax, 1, "°F")
+    ];
+
+    temperatureValues.forEach((value, index) => {
+      const cell = document.createElement(index === 0 ? "th" : "td");
+      if (index === 0) cell.scope = "row";
+      if (index === 3) cell.classList.add("difference-value");
+      cell.textContent = value;
+      temperatureRow.appendChild(cell);
+    });
+    temperatureBody.appendChild(temperatureRow);
+
+    const precipitationRow = document.createElement("tr");
+    const precipitationValues = [
+      row.month,
       row.observedPrecip === null ? "Missing" : `${row.observedPrecip.toFixed(2)} in`,
       `${row.normalPrecip.toFixed(2)} in`,
       signed(row.observedPrecip === null ? null : row.observedPrecip - row.normalPrecip, 2, " in")
     ];
 
-    values.forEach((value, index) => {
+    precipitationValues.forEach((value, index) => {
       const cell = document.createElement(index === 0 ? "th" : "td");
       if (index === 0) cell.scope = "row";
+      if (index === 3) cell.classList.add("difference-value");
       cell.textContent = value;
-      if (index === 3 || index === 6) {
-        cell.classList.add("difference-value");
-      }
-      tr.appendChild(cell);
+      precipitationRow.appendChild(cell);
     });
-    body.appendChild(tr);
+    precipitationBody.appendChild(precipitationRow);
   });
 }
 

@@ -35,3 +35,10 @@ PERFORMANCE UPDATE
 This version no longer loads Chart.js or any other chart library from an
 external CDN. The weather visualization is rendered locally as accessible SVG.
 All activity data and chart code are served from the GitHub Pages repository.
+
+
+LAYOUT UPDATE
+-------------
+The climate comparison is now divided into separate temperature and
+precipitation tables. This removes the internal horizontal scrolling and
+reduces visual crowding while preserving all comparison values.

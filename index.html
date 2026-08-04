@@ -106,29 +106,45 @@
         then use the bold difference values to identify where the season departed from normal.
       </p>
 
-      <div class="table-scroll">
-        <table id="comparison-table">
-          <caption>Monthly weather compared with long-term climate normals</caption>
-          <thead>
-            <tr>
-              <th rowspan="2" scope="col">Month</th>
-              <th colspan="3" scope="colgroup">Average daily high</th>
-              <th colspan="3" scope="colgroup">Total precipitation</th>
-            </tr>
-            <tr>
-              <th scope="col">2024</th>
-              <th scope="col">Normal</th>
-              <th scope="col">Difference</th>
-              <th scope="col">2024</th>
-              <th scope="col">Normal</th>
-              <th scope="col">Difference</th>
-            </tr>
-          </thead>
-          <tbody id="comparison-body">
-            <tr><td colspan="7">Waiting for weather observations…</td></tr>
-          </tbody>
-        </table>
+      
+      <div class="climate-comparison-group">
+        <section class="climate-table-section" aria-labelledby="temperature-comparison-heading">
+          <h3 id="temperature-comparison-heading">Temperature comparison</h3>
+          <table id="temperature-comparison-table">
+            <caption>Monthly average daily high temperature compared with the 1991–2020 normal</caption>
+            <thead>
+              <tr>
+                <th scope="col">Month</th>
+                <th scope="col">2024</th>
+                <th scope="col">Normal</th>
+                <th scope="col">Difference</th>
+              </tr>
+            </thead>
+            <tbody id="temperature-comparison-body">
+              <tr><td colspan="4">Preparing temperature comparison…</td></tr>
+            </tbody>
+          </table>
+        </section>
+
+        <section class="climate-table-section" aria-labelledby="precipitation-comparison-heading">
+          <h3 id="precipitation-comparison-heading">Precipitation comparison</h3>
+          <table id="precipitation-comparison-table">
+            <caption>Monthly precipitation compared with the 1991–2020 normal</caption>
+            <thead>
+              <tr>
+                <th scope="col">Month</th>
+                <th scope="col">2024</th>
+                <th scope="col">Normal</th>
+                <th scope="col">Difference</th>
+              </tr>
+            </thead>
+            <tbody id="precipitation-comparison-body">
+              <tr><td colspan="4">Preparing precipitation comparison…</td></tr>
+            </tbody>
+          </table>
+        </section>
       </div>
+
 
       <div id="season-summary" class="summary-box" aria-live="polite">
         The seasonal comparison will appear after the data load.
