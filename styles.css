@@ -219,3 +219,13 @@ footer{background:#21352c;color:#fff;padding:1.25rem 0;font-size:.9rem}
 /* Clear, non-color-dependent emphasis for departures from normal */
 .difference-value{font-weight:800;}
 #comparison-table tbody tr:nth-child(even){background:#f7f9f7;}
+
+.weather-svg-chart{
+  width:100%;
+  height:100%;
+}
+.weather-svg-chart svg{
+  display:block;
+  width:100%;
+  height:100%;
+}

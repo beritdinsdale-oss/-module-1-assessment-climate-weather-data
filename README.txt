@@ -29,3 +29,9 @@ station record. The activity retains the source attribution on the page.
 GITHUB
 Overwrite index.html, styles.css, app.js, and README.txt. Add weather-data.js.
 Do not delete the repository. Commit directly to the branch used by GitHub Pages.
+
+PERFORMANCE UPDATE
+------------------
+This version no longer loads Chart.js or any other chart library from an
+external CDN. The weather visualization is rendered locally as accessible SVG.
+All activity data and chart code are served from the GitHub Pages repository.

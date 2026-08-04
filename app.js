@@ -98,93 +98,196 @@ function buildSummary(summary) {
   `;
 }
 
+
 function buildChart(observations) {
-  const canvas = document.querySelector("#weather-chart");
-  if (!canvas || typeof Chart === "undefined") {
-    throw new Error("The chart library did not load.");
+  const container = document.querySelector("#weather-chart");
+  if (!container) {
+    throw new Error("The chart container was not found.");
   }
 
-  const labels = observations.map(item => item.date);
-  const temperatures = observations.map(item => item.maxTemp);
-  const precipitation = observations.map(item => item.precipitation);
+  const showTemperature = document.querySelector("#show-temperature");
+  const showPrecipitation = document.querySelector("#show-precipitation");
 
-  weatherChart = new Chart(canvas, {
-    data: {
-      labels,
-      datasets: [
-        {
-          type: "line",
-          label: "Daily high temperature (°F)",
-          data: temperatures,
-          yAxisID: "temperature",
-          borderWidth: 2,
-          pointRadius: 0,
-          pointHoverRadius: 5,
-          spanGaps: false,
-          tension: 0.12
-        },
-        {
-          type: "bar",
-          label: "Daily precipitation (inches)",
-          data: precipitation,
-          yAxisID: "precipitation",
-          borderWidth: 0
-        }
-      ]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      interaction: { mode: "index", intersect: false },
-      parsing: false,
-      plugins: {
-        legend: { position: "bottom" },
-        tooltip: {
-          callbacks: {
-            title(items) {
-              if (!items.length) return "";
-              const date = new Date(`${labels[items[0].dataIndex]}T12:00:00`);
-              return date.toLocaleDateString("en-US", {
-                month: "long", day: "numeric", year: "numeric"
-              });
-            }
-          }
-        }
-      },
-      scales: {
-        x: {
-          ticks: {
-            maxTicksLimit: 7,
-            callback(value, index) {
-              const date = new Date(`${labels[index]}T12:00:00`);
-              return date.toLocaleDateString("en-US", { month: "short" });
-            }
-          },
-          title: { display: true, text: "Date" }
-        },
-        temperature: {
-          position: "left",
-          title: { display: true, text: "Daily high temperature (°F)" }
-        },
-        precipitation: {
-          position: "right",
-          beginAtZero: true,
-          grid: { drawOnChartArea: false },
-          title: { display: true, text: "Daily precipitation (inches)" }
-        }
-      }
+  function draw() {
+    const width = Math.max(container.clientWidth || 720, 320);
+    const height = 360;
+    const margin = { top: 22, right: 54, bottom: 48, left: 54 };
+    const plotWidth = width - margin.left - margin.right;
+    const plotHeight = height - margin.top - margin.bottom;
+
+    const temperatures = observations
+      .map(item => item.maxTemp)
+      .filter(value => value !== null);
+    const precipitation = observations
+      .map(item => item.precipitation)
+      .filter(value => value !== null);
+
+    const tempMin = Math.floor((Math.min(...temperatures) - 5) / 5) * 5;
+    const tempMax = Math.ceil((Math.max(...temperatures) + 5) / 5) * 5;
+    const precipMax = Math.max(1, Math.ceil(Math.max(...precipitation) * 4) / 4);
+
+    const x = index =>
+      margin.left + (index / Math.max(observations.length - 1, 1)) * plotWidth;
+    const yTemp = value =>
+      margin.top + ((tempMax - value) / (tempMax - tempMin)) * plotHeight;
+    const yPrecip = value =>
+      margin.top + plotHeight - (value / precipMax) * plotHeight;
+
+    const svgNS = "http://www.w3.org/2000/svg";
+    const svg = document.createElementNS(svgNS, "svg");
+    svg.setAttribute("viewBox", `0 0 ${width} ${height}`);
+    svg.setAttribute("width", "100%");
+    svg.setAttribute("height", "100%");
+    svg.setAttribute(
+      "aria-label",
+      "Daily maximum temperature and precipitation for Corvallis from April through September 2024."
+    );
+
+    function add(tag, attrs = {}, text = "") {
+      const el = document.createElementNS(svgNS, tag);
+      Object.entries(attrs).forEach(([key, value]) => el.setAttribute(key, value));
+      if (text) el.textContent = text;
+      svg.appendChild(el);
+      return el;
     }
+
+    const css = getComputedStyle(document.documentElement);
+    const ink = css.getPropertyValue("--ink").trim() || "#183028";
+    const muted = css.getPropertyValue("--muted").trim() || "#53645e";
+    const border = css.getPropertyValue("--border").trim() || "#c8d5ce";
+    const accent = css.getPropertyValue("--accent").trim() || "#2f6f4e";
+
+    for (let i = 0; i <= 5; i++) {
+      const value = tempMin + ((tempMax - tempMin) * i) / 5;
+      const y = yTemp(value);
+      add("line", {
+        x1: margin.left,
+        y1: y,
+        x2: width - margin.right,
+        y2: y,
+        stroke: border,
+        "stroke-width": 1
+      });
+      add("text", {
+        x: margin.left - 8,
+        y: y + 4,
+        "text-anchor": "end",
+        fill: muted,
+        "font-size": 12
+      }, `${Math.round(value)}°`);
+    }
+
+    const monthStarts = observations
+      .map((item, index) => ({ item, index }))
+      .filter(({ item, index }) => index === 0 || item.date.slice(5, 7) !== observations[index - 1].date.slice(5, 7));
+
+    monthStarts.forEach(({ item, index }) => {
+      const date = new Date(`${item.date}T12:00:00`);
+      add("text", {
+        x: x(index),
+        y: height - 18,
+        "text-anchor": index === 0 ? "start" : "middle",
+        fill: muted,
+        "font-size": 12
+      }, date.toLocaleDateString("en-US", { month: "short" }));
+    });
+
+    add("text", {
+      x: 16,
+      y: height / 2,
+      transform: `rotate(-90 16 ${height / 2})`,
+      "text-anchor": "middle",
+      fill: ink,
+      "font-size": 12
+    }, "Daily high temperature (°F)");
+
+    add("text", {
+      x: width - 10,
+      y: height / 2,
+      transform: `rotate(90 ${width - 10} ${height / 2})`,
+      "text-anchor": "middle",
+      fill: ink,
+      "font-size": 12
+    }, "Daily precipitation (inches)");
+
+    if (showPrecipitation.checked) {
+      const barWidth = Math.max(1, plotWidth / observations.length - 0.5);
+      observations.forEach((item, index) => {
+        if (item.precipitation === null || item.precipitation <= 0) return;
+        const top = yPrecip(item.precipitation);
+        add("rect", {
+          x: x(index) - barWidth / 2,
+          y: top,
+          width: barWidth,
+          height: margin.top + plotHeight - top,
+          fill: muted,
+          opacity: 0.5
+        });
+      });
+    }
+
+    if (showTemperature.checked) {
+      const points = observations
+        .map((item, index) =>
+          item.maxTemp === null ? null : `${x(index)},${yTemp(item.maxTemp)}`
+        )
+        .filter(Boolean)
+        .join(" ");
+
+      add("polyline", {
+        points,
+        fill: "none",
+        stroke: accent,
+        "stroke-width": 2.5,
+        "stroke-linejoin": "round",
+        "stroke-linecap": "round"
+      });
+    }
+
+    const legendY = 14;
+    add("line", {
+      x1: margin.left,
+      y1: legendY,
+      x2: margin.left + 24,
+      y2: legendY,
+      stroke: accent,
+      "stroke-width": 3
+    });
+    add("text", {
+      x: margin.left + 30,
+      y: legendY + 4,
+      fill: ink,
+      "font-size": 12
+    }, "Daily high temperature");
+
+    add("rect", {
+      x: margin.left + 185,
+      y: legendY - 6,
+      width: 16,
+      height: 10,
+      fill: muted,
+      opacity: 0.5
+    });
+    add("text", {
+      x: margin.left + 207,
+      y: legendY + 4,
+      fill: ink,
+      "font-size": 12
+    }, "Daily precipitation");
+
+    container.replaceChildren(svg);
+  }
+
+  showTemperature.addEventListener("change", draw);
+  showPrecipitation.addEventListener("change", draw);
+
+  let resizeTimer;
+  window.addEventListener("resize", () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(draw, 120);
   });
 
-  document.querySelector("#show-temperature").addEventListener("change", event => {
-    weatherChart.setDatasetVisibility(0, event.target.checked);
-    weatherChart.update();
-  });
-
-  document.querySelector("#show-precipitation").addEventListener("change", event => {
-    weatherChart.setDatasetVisibility(1, event.target.checked);
-    weatherChart.update();
-  });
+  draw();
 }
 
 function setStatus(message, isError = false) {
