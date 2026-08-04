@@ -1,24 +1,8 @@
-\
 "use strict";
 
-const ACIS_URL = "https://data.rcc-acis.org/StnData";
-const STATION_ID = "351862";
-const START_DATE = "2024-04-01";
-const END_DATE = "2024-09-30";
-
-/*
-  NOAA 1991–2020 monthly normals for Corvallis State University
-  (USC00351862). Values are average daily maximum temperature (°F)
-  and total monthly precipitation (inches).
-*/
-const NORMALS = {
-  "04": { month: "April", maxTemp: 61.1, precipitation: 3.2 },
-  "05": { month: "May", maxTemp: 68.6, precipitation: 2.1 },
-  "06": { month: "June", maxTemp: 74.5, precipitation: 1.2 },
-  "07": { month: "July", maxTemp: 83.6, precipitation: 0.3 },
-  "08": { month: "August", maxTemp: 84.4, precipitation: 0.3 },
-  "09": { month: "September", maxTemp: 77.4, precipitation: 1.8 }
-};
+const STATION_NAME = "Corvallis State University";
+const OBSERVATIONS = window.CORVALLIS_WEATHER_DATA;
+const MONTHLY_COMPARISON = window.CORVALLIS_MONTHLY_COMPARISON;
 
 const quizKey = {
   q1: new Set(["warm-periods", "dry-periods", "daily-change", "rain-events"]),
@@ -36,89 +20,6 @@ const quizFeedback = {
 
 let weatherChart = null;
 const completed = new Set();
-
-function parseNumber(value) {
-  if (value === null || value === undefined) return null;
-  const text = String(value).trim();
-  if (!text || text === "M" || text === "S" || text === "T") {
-    return text === "T" ? 0 : null;
-  }
-  const number = Number.parseFloat(text);
-  return Number.isFinite(number) ? number : null;
-}
-
-async function fetchWeatherData() {
-  const payload = {
-    sid: STATION_ID,
-    sdate: START_DATE,
-    edate: END_DATE,
-    meta: ["name", "state", "sids"],
-    elems: [
-      { name: "maxt", interval: "dly", duration: "dly", prec: 1 },
-      { name: "pcpn", interval: "dly", duration: "dly", prec: 2 }
-    ]
-  };
-
-  const response = await fetch(ACIS_URL, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(payload)
-  });
-
-  if (!response.ok) {
-    throw new Error(`ACIS returned HTTP ${response.status}.`);
-  }
-
-  const result = await response.json();
-  if (!Array.isArray(result.data)) {
-    throw new Error("ACIS did not return the expected daily data.");
-  }
-
-  return {
-    meta: result.meta || {},
-    observations: result.data.map(row => ({
-      date: row[0],
-      maxTemp: parseNumber(row[1]),
-      precipitation: parseNumber(row[2])
-    }))
-  };
-}
-
-function monthKey(dateString) {
-  return dateString.slice(5, 7);
-}
-
-function summarizeByMonth(observations) {
-  const groups = {};
-
-  observations.forEach(item => {
-    const key = monthKey(item.date);
-    if (!groups[key]) {
-      groups[key] = { maxTemps: [], precipitation: [] };
-    }
-    if (item.maxTemp !== null) groups[key].maxTemps.push(item.maxTemp);
-    if (item.precipitation !== null) groups[key].precipitation.push(item.precipitation);
-  });
-
-  return Object.keys(NORMALS).map(key => {
-    const group = groups[key] || { maxTemps: [], precipitation: [] };
-    const avgMax = group.maxTemps.length
-      ? group.maxTemps.reduce((a, b) => a + b, 0) / group.maxTemps.length
-      : null;
-    const precip = group.precipitation.length
-      ? group.precipitation.reduce((a, b) => a + b, 0)
-      : null;
-
-    return {
-      key,
-      month: NORMALS[key].month,
-      observedMax: avgMax,
-      normalMax: NORMALS[key].maxTemp,
-      observedPrecip: precip,
-      normalPrecip: NORMALS[key].precipitation
-    };
-  });
-}
 
 function signed(value, digits = 1, suffix = "") {
   if (value === null) return "Missing";
@@ -146,6 +47,9 @@ function buildComparisonTable(summary) {
       const cell = document.createElement(index === 0 ? "th" : "td");
       if (index === 0) cell.scope = "row";
       cell.textContent = value;
+      if (index === 3 || index === 6) {
+        cell.classList.add("difference-value");
+      }
       tr.appendChild(cell);
     });
     body.appendChild(tr);
@@ -345,32 +249,22 @@ function setupQuiz() {
   });
 }
 
-async function initialize() {
+function initialize() {
   setupTableToggle();
   setupQuiz();
 
   try {
-    const result = await fetchWeatherData();
-    const observations = result.observations;
-    const summary = summarizeByMonth(observations);
-
-    buildDailyTable(observations);
-    buildComparisonTable(summary);
-    buildSummary(summary);
-    buildChart(observations);
-
-    const stationName = result.meta.name || "Corvallis State University";
-    setStatus(
-      `Data loaded: ${observations.length} daily observations from ${stationName}.`
-    );
+    buildDailyTable(OBSERVATIONS);
+    buildComparisonTable(MONTHLY_COMPARISON);
+    buildSummary(MONTHLY_COMPARISON);
+    buildChart(OBSERVATIONS);
+    setStatus(`Ready: ${OBSERVATIONS.length} verified daily observations from ${STATION_NAME}.`);
   } catch (error) {
     console.error(error);
     setStatus(
-      "The Corvallis observations could not be loaded from ACIS. Check your internet connection and refresh the page. The activity does not substitute estimated or invented values.",
+      "The chart could not be displayed. The complete weather and climate values remain available in the data tables.",
       true
     );
-    document.querySelector("#comparison-body").innerHTML =
-      '<tr><td colspan="7">Weather data unavailable. Refresh to try again.</td></tr>';
   }
 }
 

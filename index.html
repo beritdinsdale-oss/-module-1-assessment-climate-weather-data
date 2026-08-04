@@ -36,7 +36,7 @@
   </section>
 
   <div id="data-status" class="status" role="status" aria-live="polite">
-    Loading Corvallis weather observations…
+    Preparing the Corvallis case-study data…
   </div>
 
   <div class="three-panel-layout">
@@ -101,7 +101,8 @@
       <h2 id="climate-heading">Was the season typical?</h2>
       <p>
         The table compares the 2024 monthly weather summaries with the
-        1991–2020 climate normals for the same station.
+        1991–2020 climate normals for the same station. Read across each row,
+        then use the bold difference values to identify where the season departed from normal.
       </p>
 
       <div class="table-scroll">
@@ -215,6 +216,7 @@
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.9/dist/chart.umd.min.js"></script>
+<script src="weather-data.js"></script>
 <script src="app.js"></script>
 </body>
 </html>

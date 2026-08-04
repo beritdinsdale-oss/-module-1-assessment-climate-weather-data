@@ -1,65 +1,31 @@
-Garden Detective Challenge — Module 1
-=============================================
+Garden Detective Challenge — Local Data Edition
+================================================
 
-FILES
------
-index.html
-styles.css
-app.js
-
-PURPOSE
--------
-Learners compare actual daily weather observations from the 2024 Corvallis
-growing season with 1991–2020 climate normals, then apply the comparison to
-gardening decisions.
-
-DATA
-----
-Daily data are requested at page load from the Applied Climate Information
-System (ACIS) StnData service.
-
-Station:
-- ACIS ID: 351862
-- GHCN ID: USC00351862
-- Corvallis State University, Oregon
-
-Weather period:
-- April 1 through September 30, 2024
-
-Variables:
-- Daily maximum temperature
-- Daily precipitation
-
-Climate reference:
-- NOAA 1991–2020 monthly station normals
-- Average daily maximum temperature
-- Total monthly precipitation
-
-IMPORTANT
----------
-The activity needs internet access because it retrieves the daily observations
-from ACIS and loads Chart.js from a public CDN. If either service is unavailable,
-the page shows an error rather than substituting invented values.
-
-GITHUB PAGES
-------------
-Upload all three files to the root of one repository:
+UPLOAD THESE FIVE FILES TO THE REPOSITORY ROOT
 - index.html
 - styles.css
+- weather-data.js
 - app.js
+- README.txt
 
-In GitHub, open Settings > Pages and publish from the main branch/root folder.
+WHAT CHANGED
+- The 183 daily Corvallis observations are stored locally in weather-data.js.
+- The activity no longer contacts ACIS when a learner opens the page.
+- Monthly 2024 summaries are pre-calculated.
+- Difference values are bold rather than represented with colored icons.
+- The GitHub Pages URL and Canvas iframe URL do not change.
 
-CANVAS
-------
-After publishing with GitHub Pages, embed the published URL in Canvas using an
-iframe or add it as an External URL module item. The iframe must allow scripts.
+DATA SNAPSHOT
+Location: Corvallis State University, Oregon
+Station: USC00351862 / ACIS 351862
+Period: April 1–September 30, 2024
+Variables: daily maximum temperature and daily precipitation
+Climate reference: NOAA 1991–2020 station normals
 
-ACCESSIBILITY
--------------
-- Keyboard-operable controls
-- Visible focus indicators
-- Status and feedback announcements
-- Daily observations available as a table
-- Climate comparison available as a table
-- Charts are supplemental to the tabular data
+SOURCE NOTE
+The fixed daily snapshot was transcribed from the Corvallis State University
+station record. The activity retains the source attribution on the page.
+
+GITHUB
+Overwrite index.html, styles.css, app.js, and README.txt. Add weather-data.js.
+Do not delete the repository. Commit directly to the branch used by GitHub Pages.
