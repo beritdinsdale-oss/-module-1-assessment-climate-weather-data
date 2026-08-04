@@ -31,3 +31,24 @@ Accessibility:
 - Does not rely on color alone
 - Reduced-motion support
 - Responsive layout
+
+
+CANVAS-OPTIMIZED UPDATE
+-----------------------
+This version changes to a stacked layout at 1180 pixels rather than waiting
+until 900 pixels. Canvas commonly displays embedded pages in a narrower
+content area, so this prevents the evidence and question panels from becoming
+compressed.
+
+The bottom navigation is now sticky rather than fixed, which prevents it from
+covering content inside an iframe.
+
+Recommended Canvas iframe:
+<iframe
+  src="YOUR_GITHUB_PAGES_URL"
+  title="Garden Detective: Investigating a Growing Season"
+  width="100%"
+  height="1100"
+  style="border:0; width:100%;"
+  loading="eager">
+</iframe>

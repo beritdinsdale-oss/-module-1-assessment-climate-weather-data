@@ -27,3 +27,114 @@ fieldset{border:0;padding:0;margin:0}.question-panel label{display:block;border:
 @media(max-width:900px){.workspace,.intro-screen.active{grid-template-columns:1fr}.question-panel{position:static}.intro-photo img{height:320px}.screen{padding:1rem 1rem 7rem}.topbar{padding:.7rem 1rem}.summary-pair,.compact-evidence{grid-template-columns:1fr}.bottom-nav{padding:.65rem 1rem}.steps{gap:.3rem}.steps li{min-width:28px;height:28px}}
 @media(max-width:520px){.brand-subtitle{display:none}.step-label{font-size:.85rem}.chart{height:320px}.question-panel,.evidence{padding:1rem}.bottom-nav{grid-template-columns:1fr 1fr}.steps{display:none}.bottom-nav button{width:100%}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+
+/* Canvas iframe optimization
+   Canvas course pages often provide a viewport narrower than a full browser tab.
+   Switch to the stacked workspace before the panels become cramped. */
+html, body{
+  max-width:100%;
+  overflow-x:hidden;
+}
+
+main{
+  min-height:auto;
+}
+
+.screen{
+  padding-bottom:1.25rem;
+}
+
+.bottom-nav{
+  position:sticky;
+  bottom:0;
+  width:100%;
+}
+
+@media(max-width:1180px){
+  .workspace,
+  .intro-screen.active{
+    grid-template-columns:minmax(0,1fr);
+    max-width:920px;
+  }
+
+  .question-panel{
+    position:static;
+  }
+
+  .intro-photo img{
+    height:340px;
+  }
+
+  .screen{
+    padding:1rem 1.25rem 1.5rem;
+  }
+
+  .summary-pair{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .compact-evidence{
+    grid-template-columns:180px minmax(0,1fr);
+  }
+
+  .chart{
+    height:390px;
+  }
+}
+
+@media(max-width:760px){
+  .topbar{
+    padding:.7rem 1rem;
+  }
+
+  .summary-pair,
+  .compact-evidence{
+    grid-template-columns:1fr;
+  }
+
+  .question-panel,
+  .evidence{
+    padding:1rem;
+  }
+
+  .bottom-nav{
+    grid-template-columns:auto 1fr auto;
+    padding:.65rem .75rem;
+  }
+
+  .steps{
+    gap:.25rem;
+  }
+
+  .steps li{
+    min-width:27px;
+    height:27px;
+  }
+
+  .chart,
+  .mini-chart{
+    height:330px;
+  }
+}
+
+@media(max-width:540px){
+  .brand-subtitle{
+    display:none;
+  }
+
+  .step-label{
+    font-size:.82rem;
+  }
+
+  .bottom-nav{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .steps{
+    display:none;
+  }
+
+  .bottom-nav button{
+    width:100%;
+  }
+}
