@@ -1,334 +1,201 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Garden Detective: Investigating a Growing Season</title>
-  <link rel="stylesheet" href="styles.css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Garden Detective: Investigating a Growing Season</title>
+<link rel="stylesheet" href="styles.css">
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to main content</a>
 
-<header class="hero">
-  <div class="wrap hero-grid">
-    <div>
-      <p class="eyebrow">Module 1 data activity</p>
-      <h1>Garden Detective</h1>
-      <p class="subtitle">Investigating a growing season with weather and climate data</p>
-    </div>
-    <div class="hero-mark" aria-hidden="true">🍅</div>
+<header class="topbar">
+  <div class="brand">
+    <span class="brand-title">Garden Detective</span>
+    <span class="brand-subtitle">Investigating a Growing Season</span>
   </div>
+  <div class="step-label" id="step-label">Introduction</div>
 </header>
 
-<main id="main" class="wrap" tabindex="-1">
-  <section class="mystery-card" aria-labelledby="mystery-title">
-    <div class="mystery-icon" aria-hidden="true">🔎</div>
-    <div>
-      <h2 id="mystery-title">The mystery</h2>
+<main id="main" tabindex="-1">
+  <section class="screen intro-screen active" data-screen="0" aria-labelledby="intro-heading">
+    <div class="intro-photo">
+      <img src="tomatoes-on-vine-cc0.jpg" alt="Red and green tomatoes ripening on vines">
+      <p class="photo-credit">Photo: Dan Gold, CC0, via Wikimedia Commons</p>
+    </div>
+    <div class="intro-copy">
+      <h1 id="intro-heading">Can weather and climate data explain why the tomatoes struggled?</h1>
       <blockquote>
         “My tomatoes struggled during the 2024 growing season. It seemed hotter and drier than I expected.”
       </blockquote>
       <p>
-        Examine the daily weather record and long-term climate comparisons.
-        Then use the evidence to explain the gardener’s experience.
+        Follow four clues. Each clue shows the information you need beside the question, so you will not have to search through earlier screens.
       </p>
       <p class="source-note">
-        Corvallis State University weather station, Oregon (USC00351862).
-        Weather period: April 1–September 30, 2024.
-        Climate reference: 1991–2020 normals.
+        Corvallis State University weather station, Oregon. Weather period: April 1–September 30, 2024. Climate reference: 1991–2020 normals.
       </p>
+      <button class="primary begin" type="button">Begin investigation</button>
     </div>
   </section>
 
-  <div id="data-status" class="status" role="status" aria-live="polite">
-    Preparing the Corvallis case-study data…
-  </div>
-
-  <section class="evidence-grid" aria-label="Investigation evidence">
-    <article class="evidence-card weather-evidence" aria-labelledby="weather-heading">
-      <div class="section-kicker"><span aria-hidden="true">📅</span> Clue 1 · Daily weather</div>
-      <h2 id="weather-heading">What happened each day?</h2>
-      <p>
-        The graph shows daily high temperature and precipitation. Use it to notice
-        hot spells, rain events, and the spacing between rainfall events.
-      </p>
-
-      <div class="controls" aria-label="Weather graph controls">
-        <label class="control-chip temperature-chip">
-          <input id="show-temperature" type="checkbox" checked>
-          <span aria-hidden="true">●</span> Daily high temperature
-        </label>
-        <label class="control-chip precipitation-chip">
-          <input id="show-precipitation" type="checkbox" checked>
-          <span aria-hidden="true">▮</span> Daily precipitation
-        </label>
-      </div>
-
-      <div class="chart-shell">
-        <div
-          id="weather-chart"
-          class="weather-svg-chart"
-          role="img"
-          aria-labelledby="weather-heading weather-chart-description">
+  <section class="screen" data-screen="1" aria-labelledby="weather-screen-heading">
+    <div class="workspace">
+      <section class="evidence evidence-weather" aria-labelledby="weather-screen-heading">
+        <h1 id="weather-screen-heading">Daily weather</h1>
+        <p class="lead">Use the graph to see when temperatures rose and when precipitation occurred.</p>
+        <div class="controls">
+          <label><input id="show-temperature" type="checkbox" checked> Daily high temperature</label>
+          <label><input id="show-precipitation" type="checkbox" checked> Daily precipitation</label>
         </div>
-      </div>
-      <p id="weather-chart-description" class="visually-hidden">
-        A line represents daily maximum temperature and bars represent daily precipitation
-        for Corvallis from April through September 2024. The same observations are available
-        in the daily data table.
-      </p>
-
-      <button
-        id="toggle-daily-table"
-        class="button button-secondary"
-        type="button"
-        aria-expanded="false"
-        aria-controls="daily-table-wrap">
-        View daily data table
-      </button>
-
-      <div id="daily-table-wrap" hidden class="daily-table-wrap">
-        <div class="table-scroll">
+        <div id="weather-chart" class="chart" role="img" aria-label="Daily maximum temperature and precipitation for Corvallis from April through September 2024"></div>
+        <button id="toggle-daily-table" class="secondary" type="button" aria-expanded="false" aria-controls="daily-table-wrap">View daily data table</button>
+        <div id="daily-table-wrap" hidden class="table-scroll">
           <table>
-            <caption>Daily Corvallis weather observations, April–September 2024</caption>
-            <thead>
-              <tr>
-                <th scope="col">Date</th>
-                <th scope="col">High temperature (°F)</th>
-                <th scope="col">Precipitation (inches)</th>
-              </tr>
-            </thead>
+            <caption>Daily Corvallis weather observations</caption>
+            <thead><tr><th scope="col">Date</th><th scope="col">High °F</th><th scope="col">Precipitation (in)</th></tr></thead>
             <tbody id="daily-table-body"></tbody>
           </table>
         </div>
-      </div>
-    </article>
-
-    <article class="evidence-card climate-evidence" aria-labelledby="climate-heading">
-      <div class="section-kicker"><span aria-hidden="true">📊</span> Clue 2 · Climate comparison</div>
-      <h2 id="climate-heading">How did 2024 compare with normal?</h2>
-      <p>
-        Compare each month with the 1991–2020 normal. The <strong>Difference</strong>
-        column shows how far 2024 was above or below normal.
-      </p>
-
-      <section class="data-block temperature-block" aria-labelledby="temperature-heading">
-        <div class="data-block-heading">
-          <span class="data-symbol" aria-hidden="true">☀</span>
-          <div>
-            <p class="data-label">Temperature evidence</p>
-            <h3 id="temperature-heading">Average daily high</h3>
-          </div>
-        </div>
-        <table>
-          <caption>Monthly average daily high temperature compared with normal</caption>
-          <thead>
-            <tr>
-              <th scope="col">Month</th>
-              <th scope="col">2024</th>
-              <th scope="col">Normal</th>
-              <th scope="col">Difference</th>
-            </tr>
-          </thead>
-          <tbody id="temperature-comparison-body">
-            <tr><td colspan="4">Preparing temperature comparison…</td></tr>
-          </tbody>
-        </table>
       </section>
 
-      <section class="data-block precipitation-block" aria-labelledby="precipitation-heading">
-        <div class="data-block-heading">
-          <span class="data-symbol" aria-hidden="true">◆</span>
-          <div>
-            <p class="data-label">Precipitation evidence</p>
-            <h3 id="precipitation-heading">Monthly precipitation</h3>
-          </div>
-        </div>
-        <table>
-          <caption>Monthly precipitation compared with normal</caption>
-          <thead>
-            <tr>
-              <th scope="col">Month</th>
-              <th scope="col">2024</th>
-              <th scope="col">Normal</th>
-              <th scope="col">Difference</th>
-            </tr>
-          </thead>
-          <tbody id="precipitation-comparison-body">
-            <tr><td colspan="4">Preparing precipitation comparison…</td></tr>
-          </tbody>
-        </table>
-      </section>
-
-      <aside class="detective-tip" aria-labelledby="tip-heading">
-        <h3 id="tip-heading"><span aria-hidden="true">💡</span> Garden Detective Tip</h3>
-        <p>
-          To find the <strong>average temperature departure</strong> for several months,
-          add the values in the Difference column and divide by the number of months.
-        </p>
-        <div class="worked-example" aria-label="Worked summer temperature example">
-          <span>June: <strong>+0.9°F</strong></span>
-          <span>July: <strong>+5.2°F</strong></span>
-          <span>August: <strong>−0.5°F</strong></span>
-          <span class="example-result">
-            (+0.9 + 5.2 − 0.5) ÷ 3 = <strong>+1.9°F</strong>
-          </span>
-        </div>
-        <p class="small">
-          Averages summarize the overall pattern. Monthly and daily values show how
-          conditions changed within that period.
-        </p>
-      </aside>
-
-      <section class="period-summary" aria-labelledby="summary-heading">
-        <h3 id="summary-heading">Compare two time periods</h3>
-        <div class="summary-grid">
-          <article class="summary-card growing-summary">
-            <p class="summary-period">Growing season</p>
-            <p class="summary-dates">April–September</p>
-            <dl>
-              <div><dt>Temperature</dt><dd>+1.1°F</dd></div>
-              <div><dt>Precipitation</dt><dd>−0.79 in</dd></div>
-            </dl>
-            <p>Warmer and drier than normal overall.</p>
-          </article>
-          <article class="summary-card summer-summary">
-            <p class="summary-period">Summer</p>
-            <p class="summary-dates">June–August</p>
-            <dl>
-              <div><dt>Temperature</dt><dd>+1.9°F</dd></div>
-              <div><dt>Precipitation</dt><dd>+0.36 in</dd></div>
-            </dl>
-            <p>Warmer, with slightly above-normal precipitation.</p>
-          </article>
-        </div>
-        <p class="summary-note">
-          Different time periods can tell different stories. The daily graph adds
-          another layer by showing <strong>when</strong> precipitation fell, not only
-          the total amount.
-        </p>
-      </section>
-    </article>
-  </section>
-
-  <section class="investigation" aria-labelledby="investigation-heading">
-    <div class="investigation-header">
-      <div>
-        <p class="section-kicker"><span aria-hidden="true">🗂</span> Your investigation</p>
-        <h2 id="investigation-heading">Solve the tomato mystery</h2>
-        <p>Review one question at a time. You can return to earlier questions before finishing.</p>
-      </div>
-      <div class="progress-wrap">
-        <p id="progress-text">Question 1 of 4</p>
-        <div class="progress-track" aria-hidden="true">
-          <div id="progress-bar" class="progress-bar"></div>
-        </div>
-      </div>
-    </div>
-
-    <form id="quiz" novalidate>
-      <section class="question-slide" data-question="q1" data-index="0">
-        <fieldset>
-          <legend>Looking at the Growing Season Summary, which statement best describes April–September 2024?</legend>
-          <div class="answer-list">
-            <label><input type="radio" name="q1" value="a"> Cooler and wetter than normal</label>
-            <label><input type="radio" name="q1" value="b"> Cooler and drier than normal</label>
-            <label><input type="radio" name="q1" value="c"> Warmer and drier than normal</label>
-            <label><input type="radio" name="q1" value="d"> About average for both measures</label>
-          </div>
-          <button class="button check-answer" type="button">Check answer</button>
-          <p class="feedback" role="status" aria-live="polite"></p>
+      <section class="question-panel" aria-labelledby="q1-heading">
+        <p class="question-number">Clue 1 of 4</p>
+        <h2 id="q1-heading">What pattern is visible in the daily weather data?</h2>
+        <fieldset data-question="q1">
+          <legend class="visually-hidden">Choose the best answer</legend>
+          <label><input type="radio" name="q1" value="a"> Temperatures stayed nearly the same throughout the season.</label>
+          <label><input type="radio" name="q1" value="b"> Rain fell in similar amounts almost every day.</label>
+          <label><input type="radio" name="q1" value="c"> Temperatures changed through the season, and rainfall occurred on some days with dry gaps between events.</label>
+          <label><input type="radio" name="q1" value="d"> The season was cool and continuously wet.</label>
+          <button class="primary check" type="button">Check answer</button>
+          <p class="feedback" aria-live="polite"></p>
         </fieldset>
       </section>
-
-      <section class="question-slide" data-question="q2" data-index="1" hidden>
-        <fieldset>
-          <legend>Looking at the Summer Summary, which statement best describes June–August 2024?</legend>
-          <div class="answer-list">
-            <label><input type="radio" name="q2" value="a"> Cooler with below-normal precipitation</label>
-            <label><input type="radio" name="q2" value="b"> Warmer with below-normal precipitation</label>
-            <label><input type="radio" name="q2" value="c"> Warmer with slightly above-normal precipitation</label>
-            <label><input type="radio" name="q2" value="d"> Cooler with above-normal precipitation</label>
-          </div>
-          <button class="button check-answer" type="button">Check answer</button>
-          <p class="feedback" role="status" aria-live="polite"></p>
-        </fieldset>
-      </section>
-
-      <section class="question-slide" data-question="q3" data-index="2" hidden>
-        <fieldset>
-          <legend>
-            Summer precipitation was slightly above normal. Why might the gardener
-            still have felt that the summer was hotter and drier than usual?
-          </legend>
-          <div class="answer-list">
-            <label><input type="radio" name="q3" value="a"> Summer temperatures were cooler than normal.</label>
-            <label><input type="radio" name="q3" value="b"> Rain fell in small amounts nearly every day.</label>
-            <label><input type="radio" name="q3" value="c"> Rain was concentrated in a few events, leaving long dry periods.</label>
-            <label><input type="radio" name="q3" value="d"> Summer precipitation was actually far below normal.</label>
-          </div>
-          <button class="button check-answer" type="button">Check answer</button>
-          <p class="feedback" role="status" aria-live="polite"></p>
-        </fieldset>
-      </section>
-
-      <section class="question-slide" data-question="q4" data-index="3" hidden>
-        <fieldset>
-          <legend>
-            Which combination of evidence best explains why the gardener experienced
-            the season as hotter and drier than expected?
-          </legend>
-          <div class="answer-list">
-            <label><input type="radio" name="q4" value="a"> Below-normal growing-season precipitation alone explains the experience.</label>
-            <label><input type="radio" name="q4" value="b"> Warmer summer temperatures alone explain the experience.</label>
-            <label><input type="radio" name="q4" value="c"> Uneven summer rainfall alone explains the experience.</label>
-            <label><input type="radio" name="q4" value="d"> Warmer temperatures, a drier growing season, and uneven summer rainfall all contributed.</label>
-          </div>
-          <button class="button check-answer" type="button">Check answer</button>
-          <p class="feedback" role="status" aria-live="polite"></p>
-        </fieldset>
-      </section>
-
-      <div class="question-navigation">
-        <button id="previous-question" class="button button-secondary" type="button" disabled>
-          Previous
-        </button>
-        <button id="next-question" class="button" type="button">
-          Next question
-        </button>
-      </div>
-    </form>
-
-    <div id="completion-message" class="completion-message" hidden tabindex="-1">
-      <h3>Investigation complete</h3>
-      <p>
-        You used overall averages, daily weather, and rainfall distribution to explain
-        why the gardener’s experience could differ from the seasonal precipitation total.
-      </p>
     </div>
   </section>
 
-  <section class="takeaway" aria-labelledby="takeaway-heading">
-    <div aria-hidden="true" class="takeaway-icon">✓</div>
-    <div>
-      <h2 id="takeaway-heading">Key takeaway</h2>
+  <section class="screen" data-screen="2" aria-labelledby="climate-screen-heading">
+    <div class="workspace">
+      <section class="evidence evidence-climate" aria-labelledby="climate-screen-heading">
+        <h1 id="climate-screen-heading">Growing season and summer climate summaries</h1>
+        <p class="lead">Compare April–September with the shorter June–August period.</p>
+        <div class="summary-pair">
+          <article class="summary-card temperature-card">
+            <h2>Temperature departure</h2>
+            <dl>
+              <div><dt>Growing season</dt><dd>+1.1°F</dd></div>
+              <div><dt>Summer</dt><dd>+1.9°F</dd></div>
+            </dl>
+          </article>
+          <article class="summary-card rain-card">
+            <h2>Precipitation departure</h2>
+            <dl>
+              <div><dt>Growing season</dt><dd>−0.79 in</dd></div>
+              <div><dt>Summer</dt><dd>+0.36 in</dd></div>
+            </dl>
+          </article>
+        </div>
+        <aside class="tip">
+          <h2>How the summer temperature average was calculated</h2>
+          <p>June +0.9°F + July +5.2°F + August −0.5°F = +5.6°F</p>
+          <p><strong>+5.6°F ÷ 3 months = +1.9°F</strong></p>
+        </aside>
+      </section>
+
+      <section class="question-panel" aria-labelledby="q2-heading">
+        <p class="question-number">Clue 2 of 4</p>
+        <h2 id="q2-heading">How did the growing season and summer differ?</h2>
+        <fieldset data-question="q2">
+          <legend class="visually-hidden">Choose the best answer</legend>
+          <label><input type="radio" name="q2" value="a"> Both periods were cooler and wetter than normal.</label>
+          <label><input type="radio" name="q2" value="b"> The growing season was warmer and drier, while summer was warmer with slightly above-normal precipitation.</label>
+          <label><input type="radio" name="q2" value="c"> The growing season was wetter, while summer was cooler and drier.</label>
+          <label><input type="radio" name="q2" value="d"> Both periods were close to normal for temperature and precipitation.</label>
+          <button class="primary check" type="button">Check answer</button>
+          <p class="feedback" aria-live="polite"></p>
+        </fieldset>
+      </section>
+    </div>
+  </section>
+
+  <section class="screen" data-screen="3" aria-labelledby="rain-screen-heading">
+    <div class="workspace">
+      <section class="evidence evidence-rain" aria-labelledby="rain-screen-heading">
+        <h1 id="rain-screen-heading">Amount versus distribution of rain</h1>
+        <div class="compact-evidence">
+          <div class="metric">
+            <span class="metric-label">Summer total</span>
+            <strong>+0.36 in above normal</strong>
+          </div>
+          <div class="mini-chart" id="rain-chart" role="img" aria-label="Daily precipitation bars for June through August 2024 showing rain events separated by dry gaps"></div>
+        </div>
+        <p class="lead">
+          A seasonal total tells how much rain fell. The daily bars show when it fell and how long the dry gaps lasted.
+        </p>
+      </section>
+
+      <section class="question-panel" aria-labelledby="q3-heading">
+        <p class="question-number">Clue 3 of 4</p>
+        <h2 id="q3-heading">Summer precipitation was slightly above normal. Why might the gardener still have felt that the summer was hotter and drier than usual?</h2>
+        <fieldset data-question="q3">
+          <legend class="visually-hidden">Choose the best answer</legend>
+          <label><input type="radio" name="q3" value="a"> Summer temperatures were cooler than normal.</label>
+          <label><input type="radio" name="q3" value="b"> Rain fell in small amounts nearly every day.</label>
+          <label><input type="radio" name="q3" value="c"> Rain was concentrated in a few events, leaving long dry periods between them.</label>
+          <label><input type="radio" name="q3" value="d"> Summer precipitation was actually far below normal.</label>
+          <button class="primary check" type="button">Check answer</button>
+          <p class="feedback" aria-live="polite"></p>
+        </fieldset>
+      </section>
+    </div>
+  </section>
+
+  <section class="screen" data-screen="4" aria-labelledby="solve-screen-heading">
+    <div class="workspace">
+      <section class="evidence evidence-solve" aria-labelledby="solve-screen-heading">
+        <h1 id="solve-screen-heading">Put all the evidence together</h1>
+        <ul class="evidence-list">
+          <li><strong>Growing season:</strong> 1.1°F warmer and 0.79 inches drier than normal.</li>
+          <li><strong>Summer:</strong> 1.9°F warmer with 0.36 inches more precipitation than normal.</li>
+          <li><strong>Distribution:</strong> Rain came in separated events with dry periods between them.</li>
+        </ul>
+        <img src="tomatoes-on-vine-cc0.jpg" alt="" class="solve-photo">
+      </section>
+
+      <section class="question-panel" aria-labelledby="q4-heading">
+        <p class="question-number">Clue 4 of 4</p>
+        <h2 id="q4-heading">Which combination of evidence best explains why the gardener experienced the season as hotter and drier than expected?</h2>
+        <fieldset data-question="q4">
+          <legend class="visually-hidden">Choose the best answer</legend>
+          <label><input type="radio" name="q4" value="a"> Below-normal growing-season precipitation alone explains the experience.</label>
+          <label><input type="radio" name="q4" value="b"> Warmer summer temperatures alone explain the experience.</label>
+          <label><input type="radio" name="q4" value="c"> Uneven summer rainfall alone explains the experience.</label>
+          <label><input type="radio" name="q4" value="d"> Warmer temperatures, a drier growing season, and uneven summer rainfall all contributed.</label>
+          <button class="primary check" type="button">Check answer</button>
+          <p class="feedback" aria-live="polite"></p>
+        </fieldset>
+      </section>
+    </div>
+  </section>
+
+  <section class="screen completion-screen" data-screen="5" aria-labelledby="complete-heading">
+    <div class="complete-card">
+      <h1 id="complete-heading">Mystery solved</h1>
       <p>
-        Averages describe the overall picture, but they do not show how conditions were
-        distributed through time. Gardeners need both climate summaries and daily weather
-        information to understand what plants experienced.
+        The growing season was warmer and drier than normal overall. Summer was warmer and had slightly above-normal total precipitation, but the rain was unevenly distributed. Together, these patterns help explain why the gardener experienced hot, dry conditions and why the tomatoes may have struggled.
       </p>
+      <button class="secondary restart" type="button">Start over</button>
     </div>
   </section>
 </main>
 
-<footer>
-  <div class="wrap">
-    <p>
-      Data: Corvallis State University station snapshot and NOAA 1991–2020 climate normals.
-      Charts are supplemented by accessible data tables.
-    </p>
-  </div>
-</footer>
+<nav class="bottom-nav" aria-label="Activity navigation">
+  <button id="previous" class="secondary" type="button" disabled>Previous</button>
+  <ol class="steps" aria-label="Progress">
+    <li class="active">Start</li><li>1</li><li>2</li><li>3</li><li>4</li><li>Finish</li>
+  </ol>
+  <button id="next" class="primary" type="button" disabled>Next</button>
+</nav>
 
 <script src="weather-data.js"></script>
 <script src="app.js"></script>
