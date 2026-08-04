@@ -1,44 +1,25 @@
-Garden Detective Challenge — Local Data Edition
-================================================
+Garden Detective: Investigating a Growing Season
+=================================================
 
-UPLOAD THESE FIVE FILES TO THE REPOSITORY ROOT
+Upload these five files together to the root of the GitHub Pages repository:
+
 - index.html
 - styles.css
-- weather-data.js
 - app.js
+- weather-data.js
 - README.txt
 
-WHAT CHANGED
-- The 183 daily Corvallis observations are stored locally in weather-data.js.
-- The activity no longer contacts ACIS when a learner opens the page.
-- Monthly 2024 summaries are pre-calculated.
-- Difference values are bold rather than represented with colored icons.
-- The GitHub Pages URL and Canvas iframe URL do not change.
+This version:
+- Uses a fixed local Corvallis 2024 data snapshot.
+- Has no external chart library or live-data dependency.
+- Distinguishes temperature and precipitation with color, symbols, headings,
+  borders, captions, and text—not color alone.
+- Presents one investigation question at a time.
+- Provides keyboard-operable controls, visible focus, live feedback, semantic
+  tables, a text alternative, and reduced-motion support.
+- Shows verified summaries:
+  Growing season (April–September): +1.1°F and −0.79 inches.
+  Summer (June–August): +1.9°F and +0.36 inches.
 
-DATA SNAPSHOT
-Location: Corvallis State University, Oregon
-Station: USC00351862 / ACIS 351862
-Period: April 1–September 30, 2024
-Variables: daily maximum temperature and daily precipitation
-Climate reference: NOAA 1991–2020 station normals
-
-SOURCE NOTE
-The fixed daily snapshot was transcribed from the Corvallis State University
-station record. The activity retains the source attribution on the page.
-
-GITHUB
-Overwrite index.html, styles.css, app.js, and README.txt. Add weather-data.js.
-Do not delete the repository. Commit directly to the branch used by GitHub Pages.
-
-PERFORMANCE UPDATE
-------------------
-This version no longer loads Chart.js or any other chart library from an
-external CDN. The weather visualization is rendered locally as accessible SVG.
-All activity data and chart code are served from the GitHub Pages repository.
-
-
-LAYOUT UPDATE
--------------
-The climate comparison is now divided into separate temperature and
-precipitation tables. This removes the internal horizontal scrolling and
-reduces visual crowding while preserving all comparison values.
+Canvas:
+The existing iframe URL can remain unchanged after the files are overwritten.

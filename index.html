@@ -3,59 +3,64 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Garden Detective Challenge: Comparing Weather and Climate</title>
+  <title>Garden Detective: Investigating a Growing Season</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to main content</a>
 
 <header class="hero">
-  <div class="wrap">
-    <p class="eyebrow">Module 1 data activity</p>
-    <h1>Garden Detective Challenge</h1>
-    <p class="subtitle">Did the 2024 growing season match the climate gardeners usually expect in Corvallis?</p>
+  <div class="wrap hero-grid">
+    <div>
+      <p class="eyebrow">Module 1 data activity</p>
+      <h1>Garden Detective</h1>
+      <p class="subtitle">Investigating a growing season with weather and climate data</p>
+    </div>
+    <div class="hero-mark" aria-hidden="true">🍅</div>
   </div>
 </header>
 
 <main id="main" class="wrap" tabindex="-1">
-  <section class="intro panel" aria-labelledby="mystery-title">
-    <h2 id="mystery-title">The mystery</h2>
-    <blockquote>
-      “My tomatoes struggled during the 2024 growing season. It seemed hotter and drier than I expected.”
-    </blockquote>
-    <p>
-      Examine daily weather observations and compare them with long-term climate averages.
-      Use the evidence to decide what happened and which gardening responses were appropriate.
-    </p>
-    <p class="source-note">
-      Location: Corvallis State University weather station, Oregon
-      (<span id="station-id">station 351862 / USC00351862</span>).
-      Weather period: April 1–September 30, 2024.
-      Climate reference: 1991–2020 normals.
-    </p>
+  <section class="mystery-card" aria-labelledby="mystery-title">
+    <div class="mystery-icon" aria-hidden="true">🔎</div>
+    <div>
+      <h2 id="mystery-title">The mystery</h2>
+      <blockquote>
+        “My tomatoes struggled during the 2024 growing season. It seemed hotter and drier than I expected.”
+      </blockquote>
+      <p>
+        Examine the daily weather record and long-term climate comparisons.
+        Then use the evidence to explain the gardener’s experience.
+      </p>
+      <p class="source-note">
+        Corvallis State University weather station, Oregon (USC00351862).
+        Weather period: April 1–September 30, 2024.
+        Climate reference: 1991–2020 normals.
+      </p>
+    </div>
   </section>
 
   <div id="data-status" class="status" role="status" aria-live="polite">
     Preparing the Corvallis case-study data…
   </div>
 
-  <div class="three-panel-layout">
-    <section class="panel evidence-panel" aria-labelledby="weather-heading">
-      <p class="panel-label">Clue 1</p>
+  <section class="evidence-grid" aria-label="Investigation evidence">
+    <article class="evidence-card weather-evidence" aria-labelledby="weather-heading">
+      <div class="section-kicker"><span aria-hidden="true">📅</span> Clue 1 · Daily weather</div>
       <h2 id="weather-heading">What happened each day?</h2>
       <p>
-        Explore daily maximum temperature and precipitation. Weather data reveal
-        short-term changes, rain events, hot spells, and dry stretches.
+        The graph shows daily high temperature and precipitation. Use it to notice
+        hot spells, rain events, and the spacing between rainfall events.
       </p>
 
-      <div class="controls" aria-label="Weather chart controls">
-        <label>
+      <div class="controls" aria-label="Weather graph controls">
+        <label class="control-chip temperature-chip">
           <input id="show-temperature" type="checkbox" checked>
-          Show daily high temperature
+          <span aria-hidden="true">●</span> Daily high temperature
         </label>
-        <label>
+        <label class="control-chip precipitation-chip">
           <input id="show-precipitation" type="checkbox" checked>
-          Show daily precipitation
+          <span aria-hidden="true">▮</span> Daily precipitation
         </label>
       </div>
 
@@ -68,166 +73,259 @@
         </div>
       </div>
       <p id="weather-chart-description" class="visually-hidden">
-        A combined chart of daily maximum temperature and daily precipitation
-        for Corvallis from April through September 2024. A data table containing
-        the same observations is available below.
+        A line represents daily maximum temperature and bars represent daily precipitation
+        for Corvallis from April through September 2024. The same observations are available
+        in the daily data table.
       </p>
 
       <button
         id="toggle-daily-table"
-        class="secondary"
+        class="button button-secondary"
         type="button"
         aria-expanded="false"
         aria-controls="daily-table-wrap">
         View daily data table
       </button>
 
-      <div id="daily-table-wrap" hidden class="table-scroll">
+      <div id="daily-table-wrap" hidden class="daily-table-wrap">
+        <div class="table-scroll">
+          <table>
+            <caption>Daily Corvallis weather observations, April–September 2024</caption>
+            <thead>
+              <tr>
+                <th scope="col">Date</th>
+                <th scope="col">High temperature (°F)</th>
+                <th scope="col">Precipitation (inches)</th>
+              </tr>
+            </thead>
+            <tbody id="daily-table-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </article>
+
+    <article class="evidence-card climate-evidence" aria-labelledby="climate-heading">
+      <div class="section-kicker"><span aria-hidden="true">📊</span> Clue 2 · Climate comparison</div>
+      <h2 id="climate-heading">How did 2024 compare with normal?</h2>
+      <p>
+        Compare each month with the 1991–2020 normal. The <strong>Difference</strong>
+        column shows how far 2024 was above or below normal.
+      </p>
+
+      <section class="data-block temperature-block" aria-labelledby="temperature-heading">
+        <div class="data-block-heading">
+          <span class="data-symbol" aria-hidden="true">☀</span>
+          <div>
+            <p class="data-label">Temperature evidence</p>
+            <h3 id="temperature-heading">Average daily high</h3>
+          </div>
+        </div>
         <table>
-          <caption>Daily Corvallis weather observations, April–September 2024</caption>
+          <caption>Monthly average daily high temperature compared with normal</caption>
           <thead>
             <tr>
-              <th scope="col">Date</th>
-              <th scope="col">High temperature (°F)</th>
-              <th scope="col">Precipitation (inches)</th>
+              <th scope="col">Month</th>
+              <th scope="col">2024</th>
+              <th scope="col">Normal</th>
+              <th scope="col">Difference</th>
             </tr>
           </thead>
-          <tbody id="daily-table-body"></tbody>
+          <tbody id="temperature-comparison-body">
+            <tr><td colspan="4">Preparing temperature comparison…</td></tr>
+          </tbody>
         </table>
-      </div>
-    </section>
+      </section>
 
-    <section class="panel comparison-panel" aria-labelledby="climate-heading">
-      <p class="panel-label">Clue 2</p>
-      <h2 id="climate-heading">Was the season typical?</h2>
+      <section class="data-block precipitation-block" aria-labelledby="precipitation-heading">
+        <div class="data-block-heading">
+          <span class="data-symbol" aria-hidden="true">◆</span>
+          <div>
+            <p class="data-label">Precipitation evidence</p>
+            <h3 id="precipitation-heading">Monthly precipitation</h3>
+          </div>
+        </div>
+        <table>
+          <caption>Monthly precipitation compared with normal</caption>
+          <thead>
+            <tr>
+              <th scope="col">Month</th>
+              <th scope="col">2024</th>
+              <th scope="col">Normal</th>
+              <th scope="col">Difference</th>
+            </tr>
+          </thead>
+          <tbody id="precipitation-comparison-body">
+            <tr><td colspan="4">Preparing precipitation comparison…</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <aside class="detective-tip" aria-labelledby="tip-heading">
+        <h3 id="tip-heading"><span aria-hidden="true">💡</span> Garden Detective Tip</h3>
+        <p>
+          To find the <strong>average temperature departure</strong> for several months,
+          add the values in the Difference column and divide by the number of months.
+        </p>
+        <div class="worked-example" aria-label="Worked summer temperature example">
+          <span>June: <strong>+0.9°F</strong></span>
+          <span>July: <strong>+5.2°F</strong></span>
+          <span>August: <strong>−0.5°F</strong></span>
+          <span class="example-result">
+            (+0.9 + 5.2 − 0.5) ÷ 3 = <strong>+1.9°F</strong>
+          </span>
+        </div>
+        <p class="small">
+          Averages summarize the overall pattern. Monthly and daily values show how
+          conditions changed within that period.
+        </p>
+      </aside>
+
+      <section class="period-summary" aria-labelledby="summary-heading">
+        <h3 id="summary-heading">Compare two time periods</h3>
+        <div class="summary-grid">
+          <article class="summary-card growing-summary">
+            <p class="summary-period">Growing season</p>
+            <p class="summary-dates">April–September</p>
+            <dl>
+              <div><dt>Temperature</dt><dd>+1.1°F</dd></div>
+              <div><dt>Precipitation</dt><dd>−0.79 in</dd></div>
+            </dl>
+            <p>Warmer and drier than normal overall.</p>
+          </article>
+          <article class="summary-card summer-summary">
+            <p class="summary-period">Summer</p>
+            <p class="summary-dates">June–August</p>
+            <dl>
+              <div><dt>Temperature</dt><dd>+1.9°F</dd></div>
+              <div><dt>Precipitation</dt><dd>+0.36 in</dd></div>
+            </dl>
+            <p>Warmer, with slightly above-normal precipitation.</p>
+          </article>
+        </div>
+        <p class="summary-note">
+          Different time periods can tell different stories. The daily graph adds
+          another layer by showing <strong>when</strong> precipitation fell, not only
+          the total amount.
+        </p>
+      </section>
+    </article>
+  </section>
+
+  <section class="investigation" aria-labelledby="investigation-heading">
+    <div class="investigation-header">
+      <div>
+        <p class="section-kicker"><span aria-hidden="true">🗂</span> Your investigation</p>
+        <h2 id="investigation-heading">Solve the tomato mystery</h2>
+        <p>Review one question at a time. You can return to earlier questions before finishing.</p>
+      </div>
+      <div class="progress-wrap">
+        <p id="progress-text">Question 1 of 4</p>
+        <div class="progress-track" aria-hidden="true">
+          <div id="progress-bar" class="progress-bar"></div>
+        </div>
+      </div>
+    </div>
+
+    <form id="quiz" novalidate>
+      <section class="question-slide" data-question="q1" data-index="0">
+        <fieldset>
+          <legend>Looking at the Growing Season Summary, which statement best describes April–September 2024?</legend>
+          <div class="answer-list">
+            <label><input type="radio" name="q1" value="a"> Cooler and wetter than normal</label>
+            <label><input type="radio" name="q1" value="b"> Cooler and drier than normal</label>
+            <label><input type="radio" name="q1" value="c"> Warmer and drier than normal</label>
+            <label><input type="radio" name="q1" value="d"> About average for both measures</label>
+          </div>
+          <button class="button check-answer" type="button">Check answer</button>
+          <p class="feedback" role="status" aria-live="polite"></p>
+        </fieldset>
+      </section>
+
+      <section class="question-slide" data-question="q2" data-index="1" hidden>
+        <fieldset>
+          <legend>Looking at the Summer Summary, which statement best describes June–August 2024?</legend>
+          <div class="answer-list">
+            <label><input type="radio" name="q2" value="a"> Cooler with below-normal precipitation</label>
+            <label><input type="radio" name="q2" value="b"> Warmer with below-normal precipitation</label>
+            <label><input type="radio" name="q2" value="c"> Warmer with slightly above-normal precipitation</label>
+            <label><input type="radio" name="q2" value="d"> Cooler with above-normal precipitation</label>
+          </div>
+          <button class="button check-answer" type="button">Check answer</button>
+          <p class="feedback" role="status" aria-live="polite"></p>
+        </fieldset>
+      </section>
+
+      <section class="question-slide" data-question="q3" data-index="2" hidden>
+        <fieldset>
+          <legend>
+            Summer precipitation was slightly above normal. Why might the gardener
+            still have felt that the summer was hotter and drier than usual?
+          </legend>
+          <div class="answer-list">
+            <label><input type="radio" name="q3" value="a"> Summer temperatures were cooler than normal.</label>
+            <label><input type="radio" name="q3" value="b"> Rain fell in small amounts nearly every day.</label>
+            <label><input type="radio" name="q3" value="c"> Rain was concentrated in a few events, leaving long dry periods.</label>
+            <label><input type="radio" name="q3" value="d"> Summer precipitation was actually far below normal.</label>
+          </div>
+          <button class="button check-answer" type="button">Check answer</button>
+          <p class="feedback" role="status" aria-live="polite"></p>
+        </fieldset>
+      </section>
+
+      <section class="question-slide" data-question="q4" data-index="3" hidden>
+        <fieldset>
+          <legend>
+            Which combination of evidence best explains why the gardener experienced
+            the season as hotter and drier than expected?
+          </legend>
+          <div class="answer-list">
+            <label><input type="radio" name="q4" value="a"> Below-normal growing-season precipitation alone explains the experience.</label>
+            <label><input type="radio" name="q4" value="b"> Warmer summer temperatures alone explain the experience.</label>
+            <label><input type="radio" name="q4" value="c"> Uneven summer rainfall alone explains the experience.</label>
+            <label><input type="radio" name="q4" value="d"> Warmer temperatures, a drier growing season, and uneven summer rainfall all contributed.</label>
+          </div>
+          <button class="button check-answer" type="button">Check answer</button>
+          <p class="feedback" role="status" aria-live="polite"></p>
+        </fieldset>
+      </section>
+
+      <div class="question-navigation">
+        <button id="previous-question" class="button button-secondary" type="button" disabled>
+          Previous
+        </button>
+        <button id="next-question" class="button" type="button">
+          Next question
+        </button>
+      </div>
+    </form>
+
+    <div id="completion-message" class="completion-message" hidden tabindex="-1">
+      <h3>Investigation complete</h3>
       <p>
-        The table compares the 2024 monthly weather summaries with the
-        1991–2020 climate normals for the same station. Read across each row,
-        then use the bold difference values to identify where the season departed from normal.
+        You used overall averages, daily weather, and rainfall distribution to explain
+        why the gardener’s experience could differ from the seasonal precipitation total.
       </p>
+    </div>
+  </section>
 
-      
-      <div class="climate-comparison-group">
-        <section class="climate-table-section" aria-labelledby="temperature-comparison-heading">
-          <h3 id="temperature-comparison-heading">Temperature comparison</h3>
-          <table id="temperature-comparison-table">
-            <caption>Monthly average daily high temperature compared with the 1991–2020 normal</caption>
-            <thead>
-              <tr>
-                <th scope="col">Month</th>
-                <th scope="col">2024</th>
-                <th scope="col">Normal</th>
-                <th scope="col">Difference</th>
-              </tr>
-            </thead>
-            <tbody id="temperature-comparison-body">
-              <tr><td colspan="4">Preparing temperature comparison…</td></tr>
-            </tbody>
-          </table>
-        </section>
-
-        <section class="climate-table-section" aria-labelledby="precipitation-comparison-heading">
-          <h3 id="precipitation-comparison-heading">Precipitation comparison</h3>
-          <table id="precipitation-comparison-table">
-            <caption>Monthly precipitation compared with the 1991–2020 normal</caption>
-            <thead>
-              <tr>
-                <th scope="col">Month</th>
-                <th scope="col">2024</th>
-                <th scope="col">Normal</th>
-                <th scope="col">Difference</th>
-              </tr>
-            </thead>
-            <tbody id="precipitation-comparison-body">
-              <tr><td colspan="4">Preparing precipitation comparison…</td></tr>
-            </tbody>
-          </table>
-        </section>
-      </div>
-
-
-      <div id="season-summary" class="summary-box" aria-live="polite">
-        The seasonal comparison will appear after the data load.
-      </div>
-    </section>
-
-    <section class="panel notebook-panel" aria-labelledby="notebook-heading">
-      <p class="panel-label">Your investigation</p>
-      <h2 id="notebook-heading">Use the evidence to solve the mystery</h2>
+  <section class="takeaway" aria-labelledby="takeaway-heading">
+    <div aria-hidden="true" class="takeaway-icon">✓</div>
+    <div>
+      <h2 id="takeaway-heading">Key takeaway</h2>
       <p>
-        Review both clues, then record the conclusions supported by the data. You may check each answer and try again.
+        Averages describe the overall picture, but they do not show how conditions were
+        distributed through time. Gardeners need both climate summaries and daily weather
+        information to understand what plants experienced.
       </p>
-
-      <form id="quiz" novalidate>
-        <fieldset class="question" data-question="q1">
-          <legend>1. Which observations are visible in the daily weather record?</legend>
-          <p class="hint">Select all that apply.</p>
-          <label><input type="checkbox" value="warm-periods"> Periods of very warm weather occurred.</label>
-          <label><input type="checkbox" value="dry-periods"> Extended dry periods occurred during summer.</label>
-          <label><input type="checkbox" value="daily-change"> Temperatures changed from day to day.</label>
-          <label><input type="checkbox" value="rain-events"> Rain fell on some days but not others.</label>
-          <label><input type="checkbox" value="same-pattern"> Every day followed the same pattern.</label>
-          <button class="check-answer" type="button">Check answer</button>
-          <p class="feedback" aria-live="polite"></p>
-        </fieldset>
-
-        <fieldset class="question" data-question="q2">
-          <legend>2. Compared with the climate normals, what was unusual about summer 2024?</legend>
-          <p class="hint">Select the two best-supported statements.</p>
-          <label><input type="checkbox" value="warmer"> Summer temperatures were generally warmer than normal.</label>
-          <label><input type="checkbox" value="drier"> Summer precipitation was generally lower than normal.</label>
-          <label><input type="checkbox" value="matched"> Every month exactly matched its climate normal.</label>
-          <label><input type="checkbox" value="permanent"> One season proves that the climate permanently changed.</label>
-          <button class="check-answer" type="button">Check answer</button>
-          <p class="feedback" aria-live="polite"></p>
-        </fieldset>
-
-        <fieldset class="question" data-question="q3">
-          <legend>3. Which conclusions require comparing weather observations with climate normals?</legend>
-          <p class="hint">Select all that apply.</p>
-          <label><input type="checkbox" value="warmer-than-normal"> The season was warmer than normal.</label>
-          <label><input type="checkbox" value="drier-than-normal"> The season was drier than normal.</label>
-          <label><input type="checkbox" value="rain-on-date"> Rain fell on a particular date.</label>
-          <label><input type="checkbox" value="daily-high"> A particular day reached a certain high temperature.</label>
-          <button class="check-answer" type="button">Check answer</button>
-          <p class="feedback" aria-live="polite"></p>
-        </fieldset>
-
-        <fieldset class="question" data-question="q4">
-          <legend>4. Which gardening responses are supported by the combined evidence?</legend>
-          <p class="hint">Select all that apply.</p>
-          <label><input type="checkbox" value="irrigation"> Monitor soil moisture and irrigate when needed.</label>
-          <label><input type="checkbox" value="mulch"> Use mulch to reduce soil-water loss.</label>
-          <label><input type="checkbox" value="heat-stress"> Watch plants for heat stress.</label>
-          <label><input type="checkbox" value="containers"> Check containers frequently because they can dry quickly.</label>
-          <label><input type="checkbox" value="saturated"> Delay planting because soils stayed saturated all summer.</label>
-          <button class="check-answer" type="button">Check answer</button>
-          <p class="feedback" aria-live="polite"></p>
-        </fieldset>
-      </form>
-
-      <p id="progress" class="progress" role="status" aria-live="polite">
-        0 of 4 notebook questions completed.
-      </p>
-      <button id="reset-quiz" class="secondary" type="button">Reset notebook</button>
-    </section>
-  </div>
-
-  <section class="panel takeaway" aria-labelledby="takeaway-heading">
-    <h2 id="takeaway-heading">Key takeaway</h2>
-    <p>
-      Daily weather records show what happened during the season. Climate normals
-      provide the reference needed to judge whether that weather was typical or unusual.
-      Gardeners use both kinds of information.
-    </p>
+    </div>
   </section>
 </main>
 
 <footer>
   <div class="wrap">
     <p>
-      Data sources: Applied Climate Information System (ACIS) daily station observations
-      and NOAA 1991–2020 U.S. Climate Normals for Corvallis State University.
+      Data: Corvallis State University station snapshot and NOAA 1991–2020 climate normals.
+      Charts are supplemented by accessible data tables.
     </p>
   </div>
 </footer>
