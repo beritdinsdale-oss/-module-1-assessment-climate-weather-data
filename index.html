@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Garden Detective Challenge: Comparing Weather and Climate</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to main content</a>
+
+<header class="hero">
+  <div class="wrap">
+    <p class="eyebrow">Module 1 data activity</p>
+    <h1>Garden Detective Challenge</h1>
+    <p class="subtitle">Did the 2024 growing season match the climate gardeners usually expect in Corvallis?</p>
+  </div>
+</header>
+
+<main id="main" class="wrap" tabindex="-1">
+  <section class="intro panel" aria-labelledby="mystery-title">
+    <h2 id="mystery-title">The mystery</h2>
+    <blockquote>
+      “My tomatoes struggled during the 2024 growing season. It seemed hotter and drier than I expected.”
+    </blockquote>
+    <p>
+      Examine daily weather observations and compare them with long-term climate averages.
+      Use the evidence to decide what happened and which gardening responses were appropriate.
+    </p>
+    <p class="source-note">
+      Location: Corvallis State University weather station, Oregon
+      (<span id="station-id">station 351862 / USC00351862</span>).
+      Weather period: April 1–September 30, 2024.
+      Climate reference: 1991–2020 normals.
+    </p>
+  </section>
+
+  <div id="data-status" class="status" role="status" aria-live="polite">
+    Loading Corvallis weather observations…
+  </div>
+
+  <div class="three-panel-layout">
+    <section class="panel evidence-panel" aria-labelledby="weather-heading">
+      <p class="panel-label">Clue 1</p>
+      <h2 id="weather-heading">What happened each day?</h2>
+      <p>
+        Explore daily maximum temperature and precipitation. Weather data reveal
+        short-term changes, rain events, hot spells, and dry stretches.
+      </p>
+
+      <div class="controls" aria-label="Weather chart controls">
+        <label>
+          <input id="show-temperature" type="checkbox" checked>
+          Show daily high temperature
+        </label>
+        <label>
+          <input id="show-precipitation" type="checkbox" checked>
+          Show daily precipitation
+        </label>
+      </div>
+
+      <div class="chart-shell">
+        <canvas
+          id="weather-chart"
+          role="img"
+          aria-labelledby="weather-heading weather-chart-description">
+        </canvas>
+      </div>
+      <p id="weather-chart-description" class="visually-hidden">
+        A combined chart of daily maximum temperature and daily precipitation
+        for Corvallis from April through September 2024. A data table containing
+        the same observations is available below.
+      </p>
+
+      <button
+        id="toggle-daily-table"
+        class="secondary"
+        type="button"
+        aria-expanded="false"
+        aria-controls="daily-table-wrap">
+        View daily data table
+      </button>
+
+      <div id="daily-table-wrap" hidden class="table-scroll">
+        <table>
+          <caption>Daily Corvallis weather observations, April–September 2024</caption>
+          <thead>
+            <tr>
+              <th scope="col">Date</th>
+              <th scope="col">High temperature (°F)</th>
+              <th scope="col">Precipitation (inches)</th>
+            </tr>
+          </thead>
+          <tbody id="daily-table-body"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="panel comparison-panel" aria-labelledby="climate-heading">
+      <p class="panel-label">Clue 2</p>
+      <h2 id="climate-heading">Was the season typical?</h2>
+      <p>
+        The table compares the 2024 monthly weather summaries with the
+        1991–2020 climate normals for the same station.
+      </p>
+
+      <div class="table-scroll">
+        <table id="comparison-table">
+          <caption>Monthly weather compared with long-term climate normals</caption>
+          <thead>
+            <tr>
+              <th rowspan="2" scope="col">Month</th>
+              <th colspan="3" scope="colgroup">Average daily high</th>
+              <th colspan="3" scope="colgroup">Total precipitation</th>
+            </tr>
+            <tr>
+              <th scope="col">2024</th>
+              <th scope="col">Normal</th>
+              <th scope="col">Difference</th>
+              <th scope="col">2024</th>
+              <th scope="col">Normal</th>
+              <th scope="col">Difference</th>
+            </tr>
+          </thead>
+          <tbody id="comparison-body">
+            <tr><td colspan="7">Waiting for weather observations…</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div id="season-summary" class="summary-box" aria-live="polite">
+        The seasonal comparison will appear after the data load.
+      </div>
+    </section>
+
+    <section class="panel notebook-panel" aria-labelledby="notebook-heading">
+      <p class="panel-label">Garden notebook</p>
+      <h2 id="notebook-heading">Record your conclusions</h2>
+      <p>
+        Use both clues. Check your answer after each question; you may try again.
+      </p>
+
+      <form id="quiz" novalidate>
+        <fieldset class="question" data-question="q1">
+          <legend>1. Which observations are visible in the daily weather record?</legend>
+          <p class="hint">Select all that apply.</p>
+          <label><input type="checkbox" value="warm-periods"> Periods of very warm weather occurred.</label>
+          <label><input type="checkbox" value="dry-periods"> Extended dry periods occurred during summer.</label>
+          <label><input type="checkbox" value="daily-change"> Temperatures changed from day to day.</label>
+          <label><input type="checkbox" value="rain-events"> Rain fell on some days but not others.</label>
+          <label><input type="checkbox" value="same-pattern"> Every day followed the same pattern.</label>
+          <button class="check-answer" type="button">Check answer</button>
+          <p class="feedback" aria-live="polite"></p>
+        </fieldset>
+
+        <fieldset class="question" data-question="q2">
+          <legend>2. Compared with the climate normals, what was unusual about summer 2024?</legend>
+          <p class="hint">Select the two best-supported statements.</p>
+          <label><input type="checkbox" value="warmer"> Summer temperatures were generally warmer than normal.</label>
+          <label><input type="checkbox" value="drier"> Summer precipitation was generally lower than normal.</label>
+          <label><input type="checkbox" value="matched"> Every month exactly matched its climate normal.</label>
+          <label><input type="checkbox" value="permanent"> One season proves that the climate permanently changed.</label>
+          <button class="check-answer" type="button">Check answer</button>
+          <p class="feedback" aria-live="polite"></p>
+        </fieldset>
+
+        <fieldset class="question" data-question="q3">
+          <legend>3. Which conclusions require comparing weather observations with climate normals?</legend>
+          <p class="hint">Select all that apply.</p>
+          <label><input type="checkbox" value="warmer-than-normal"> The season was warmer than normal.</label>
+          <label><input type="checkbox" value="drier-than-normal"> The season was drier than normal.</label>
+          <label><input type="checkbox" value="rain-on-date"> Rain fell on a particular date.</label>
+          <label><input type="checkbox" value="daily-high"> A particular day reached a certain high temperature.</label>
+          <button class="check-answer" type="button">Check answer</button>
+          <p class="feedback" aria-live="polite"></p>
+        </fieldset>
+
+        <fieldset class="question" data-question="q4">
+          <legend>4. Which gardening responses are supported by the combined evidence?</legend>
+          <p class="hint">Select all that apply.</p>
+          <label><input type="checkbox" value="irrigation"> Monitor soil moisture and irrigate when needed.</label>
+          <label><input type="checkbox" value="mulch"> Use mulch to reduce soil-water loss.</label>
+          <label><input type="checkbox" value="heat-stress"> Watch plants for heat stress.</label>
+          <label><input type="checkbox" value="containers"> Check containers frequently because they can dry quickly.</label>
+          <label><input type="checkbox" value="saturated"> Delay planting because soils stayed saturated all summer.</label>
+          <button class="check-answer" type="button">Check answer</button>
+          <p class="feedback" aria-live="polite"></p>
+        </fieldset>
+      </form>
+
+      <p id="progress" class="progress" role="status" aria-live="polite">
+        0 of 4 notebook questions completed.
+      </p>
+      <button id="reset-quiz" class="secondary" type="button">Reset notebook</button>
+    </section>
+  </div>
+
+  <section class="panel takeaway" aria-labelledby="takeaway-heading">
+    <h2 id="takeaway-heading">Key takeaway</h2>
+    <p>
+      Daily weather records show what happened during the season. Climate normals
+      provide the reference needed to judge whether that weather was typical or unusual.
+      Gardeners use both kinds of information.
+    </p>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>
+      Data sources: Applied Climate Information System (ACIS) daily station observations
+      and NOAA 1991–2020 U.S. Climate Normals for Corvallis State University.
+    </p>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.9/dist/chart.umd.min.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
