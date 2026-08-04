@@ -1,5 +1,6 @@
 Garden Detective Challenge — Module 1
 =============================================
+Updated layout deployment
 
 FILES
 -----
