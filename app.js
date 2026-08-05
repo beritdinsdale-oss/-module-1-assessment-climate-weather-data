@@ -33,26 +33,104 @@ function buildDaily(){
  DATA.forEach(d=>{const r=document.createElement("tr"),a=document.createElement("th"),b=document.createElement("td"),c=document.createElement("td");a.scope="row";a.textContent=new Date(`${d.date}T12:00:00`).toLocaleDateString("en-US",{month:"short",day:"numeric"});b.textContent=d.maxTemp.toFixed(1);c.textContent=d.precipitation.toFixed(2);r.append(a,b,c);frag.appendChild(r)});body.appendChild(frag);dailyBuilt=true
 }
 document.querySelector("#toggle-daily-table").addEventListener("click",e=>{const w=document.querySelector("#daily-table-wrap"),open=w.hidden;if(open)buildDaily();w.hidden=!open;e.currentTarget.setAttribute("aria-expanded",String(open));e.currentTarget.textContent=open?"Hide daily data table":"View daily data table"});
-function svgChart(container,subset,mode="both"){
- const width=Math.max(container.clientWidth||700,320),height=mode==="rain"?360:420,m={top:26,right:48,bottom:42,left:52},pw=width-m.left-m.right,ph=height-m.top-m.bottom,ns="http://www.w3.org/2000/svg";
- const svg=document.createElementNS(ns,"svg");svg.setAttribute("viewBox",`0 0 ${width} ${height}`);svg.setAttribute("aria-hidden","true");
- const add=(tag,a={},t="")=>{const el=document.createElementNS(ns,tag);Object.entries(a).forEach(([k,v])=>el.setAttribute(k,v));if(t)el.textContent=t;svg.appendChild(el);return el};
- const css=getComputedStyle(document.documentElement),line=css.getPropertyValue("--line").trim(),muted=css.getPropertyValue("--muted").trim(),orange=css.getPropertyValue("--orange").trim(),blue=css.getPropertyValue("--blue").trim();
- const temps=subset.map(d=>d.maxTemp),rains=subset.map(d=>d.precipitation),tmin=Math.floor((Math.min(...temps)-5)/5)*5,tmax=Math.ceil((Math.max(...temps)+5)/5)*5,rmax=Math.max(1.5,Math.ceil(Math.max(...rains)*4)/4);
- const x=i=>m.left+i/Math.max(subset.length-1,1)*pw,yt=v=>m.top+(tmax-v)/(tmax-tmin)*ph,yr=v=>m.top+ph-v/rmax*ph;
- if(mode!=="rain"){for(let i=0;i<=5;i++){const v=tmin+(tmax-tmin)*i/5,y=yt(v);add("line",{x1:m.left,y1:y,x2:width-m.right,y2:y,stroke:line});add("text",{x:m.left-7,y:y+4,"text-anchor":"end",fill:muted,"font-size":12},`${Math.round(v)}°`)}}
- const monthStarts=subset.map((d,i)=>({d,i})).filter(({d,i})=>i===0||d.date.slice(5,7)!==subset[i-1].date.slice(5,7));
- monthStarts.forEach(({d,i})=>add("text",{x:x(i),y:height-14,"text-anchor":i===0?"start":"middle",fill:muted,"font-size":12},new Date(`${d.date}T12:00:00`).toLocaleDateString("en-US",{month:"short"})));
- const bw=Math.max(1,pw/subset.length-.5);
- if(mode!=="temp")subset.forEach((d,i)=>{if(d.precipitation>0){const top=yr(d.precipitation);add("rect",{x:x(i)-bw/2,y:top,width:bw,height:m.top+ph-top,fill:blue,opacity:.78})}});
- if(mode!=="rain")add("polyline",{points:subset.map((d,i)=>`${x(i)},${yt(d.maxTemp)}`).join(" "),fill:"none",stroke:orange,"stroke-width":2.5,"stroke-linejoin":"round","stroke-linecap":"round"});
- container.replaceChildren(svg)
+function svgChart(container, subset, options = {}) {
+ const showTemperature = options.showTemperature !== false;
+ const showPrecipitation = options.showPrecipitation !== false;
+ const rainOnlyScale = options.rainOnlyScale === true;
+
+ const width = Math.max(container.clientWidth || 700, 320);
+ const height = rainOnlyScale ? 360 : 420;
+ const m = {top:26,right:48,bottom:42,left:52};
+ const pw = width - m.left - m.right;
+ const ph = height - m.top - m.bottom;
+ const ns = "http://www.w3.org/2000/svg";
+ const svg = document.createElementNS(ns,"svg");
+ svg.setAttribute("viewBox",`0 0 ${width} ${height}`);
+ svg.setAttribute("aria-hidden","true");
+
+ const add=(tag,a={},t="")=>{
+   const el=document.createElementNS(ns,tag);
+   Object.entries(a).forEach(([k,v])=>el.setAttribute(k,v));
+   if(t)el.textContent=t;
+   svg.appendChild(el);
+   return el;
+ };
+
+ const css=getComputedStyle(document.documentElement);
+ const line=css.getPropertyValue("--line").trim();
+ const muted=css.getPropertyValue("--muted").trim();
+ const orange=css.getPropertyValue("--orange").trim();
+ const blue=css.getPropertyValue("--blue").trim();
+ const temps=subset.map(d=>d.maxTemp);
+ const rains=subset.map(d=>d.precipitation);
+ const tmin=Math.floor((Math.min(...temps)-5)/5)*5;
+ const tmax=Math.ceil((Math.max(...temps)+5)/5)*5;
+ const rmax=Math.max(1.5,Math.ceil(Math.max(...rains)*4)/4);
+ const x=i=>m.left+i/Math.max(subset.length-1,1)*pw;
+ const yt=v=>m.top+(tmax-v)/(tmax-tmin)*ph;
+ const yr=v=>m.top+ph-v/rmax*ph;
+
+ if(!rainOnlyScale){
+   for(let i=0;i<=5;i++){
+     const v=tmin+(tmax-tmin)*i/5;
+     const y=yt(v);
+     add("line",{x1:m.left,y1:y,x2:width-m.right,y2:y,stroke:line});
+     add("text",{x:m.left-7,y:y+4,"text-anchor":"end",fill:muted,"font-size":12},`${Math.round(v)}°`);
+   }
+ }
+
+ const monthStarts=subset.map((d,i)=>({d,i})).filter(({d,i})=>
+   i===0||d.date.slice(5,7)!==subset[i-1].date.slice(5,7));
+ monthStarts.forEach(({d,i})=>add("text",{
+   x:x(i),y:height-14,"text-anchor":i===0?"start":"middle",fill:muted,"font-size":12
+ },new Date(`${d.date}T12:00:00`).toLocaleDateString("en-US",{month:"short"})));
+
+ if(showPrecipitation){
+   const bw=Math.max(1,pw/subset.length-.5);
+   subset.forEach((d,i)=>{
+     if(d.precipitation<=0)return;
+     const top=yr(d.precipitation);
+     add("rect",{x:x(i)-bw/2,y:top,width:bw,height:m.top+ph-top,fill:blue,opacity:.78});
+   });
+ }
+
+ if(showTemperature && !rainOnlyScale){
+   add("polyline",{
+     points:subset.map((d,i)=>`${x(i)},${yt(d.maxTemp)}`).join(" "),
+     fill:"none",stroke:orange,"stroke-width":2.5,
+     "stroke-linejoin":"round","stroke-linecap":"round"
+   });
+ }
+
+ if(!showTemperature && !showPrecipitation){
+   add("text",{x:width/2,y:height/2,"text-anchor":"middle",fill:muted,"font-size":14},
+     "Select a dataset above to display it.");
+ }
+
+ container.replaceChildren(svg);
 }
+
+function drawWeatherChart(){
+ const showTemperature=document.querySelector("#show-temperature").checked;
+ const showPrecipitation=document.querySelector("#show-precipitation").checked;
+ svgChart(document.querySelector("#weather-chart"),DATA,{showTemperature,showPrecipitation});
+}
+
+function drawRainChart(){
+ const summer=DATA.filter(d=>d.date>="2024-06-01"&&d.date<="2024-08-31");
+ svgChart(document.querySelector("#rain-chart"),summer,{
+   showTemperature:false,
+   showPrecipitation:true,
+   rainOnlyScale:true
+ });
+}
+
 function drawAll(){
- svgChart(document.querySelector("#weather-chart"),DATA,"both");
- const summer=DATA.filter(d=>d.date>="2024-06-01"&&d.date<="2024-08-31");svgChart(document.querySelector("#rain-chart"),summer,"rain");
+ drawWeatherChart();
+ drawRainChart();
 }
-document.querySelector("#show-temperature").addEventListener("change",()=>svgChart(document.querySelector("#weather-chart"),DATA,document.querySelector("#show-precipitation").checked?"both":"temp"));
-document.querySelector("#show-precipitation").addEventListener("change",()=>svgChart(document.querySelector("#weather-chart"),DATA,document.querySelector("#show-temperature").checked?"both":"rain"));
+
+document.querySelector("#show-temperature").addEventListener("change",drawWeatherChart);
+document.querySelector("#show-precipitation").addEventListener("change",drawWeatherChart);
 window.addEventListener("resize",()=>{clearTimeout(window._resizeTimer);window._resizeTimer=setTimeout(drawAll,120)});
 drawAll();show(0);
