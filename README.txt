@@ -1,4 +1,4 @@
-Garden Detective — Focused Workspaces
+Digging in the Data
 ====================================
 
 Upload all six files to the repository root:
