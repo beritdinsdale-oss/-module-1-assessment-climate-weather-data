@@ -46,7 +46,7 @@ covering content inside an iframe.
 Recommended Canvas iframe:
 <iframe
   src="YOUR_GITHUB_PAGES_URL"
-  title="Garden Detective: Investigating a Growing Season"
+  title="Digging in the Data"
   width="100%"
   height="1100"
   style="border:0; width:100%;"
